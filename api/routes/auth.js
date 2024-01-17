@@ -5,7 +5,6 @@ const db = require("../database");
 const passport = require("passport");
 const verify = require("../verifyToken");
 const dotenv = require("dotenv");
-const sgMail = require("@sendgrid/mail");
 const Isemail = require("isemail");
 const session = require("express-session");
 const upload_file = require("../uploadFiles");
@@ -14,6 +13,7 @@ const FacebookStrategy = require("passport-facebook").Strategy;
 var fs = require("fs"),
   http = require("http"),
   https = require("https");
+const sendEmail = require("../sendEmail");
 
 var Stream = require("stream").Transform;
 
@@ -343,13 +343,9 @@ router.get("/register", async (req, res) => {
         </body>
         </html>
         `;
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-    let msg = {
-      to: req.body.email,
-      from: "no-reply@curant24.com",
-      subject: "Welcom on Curant24",
-      html,
-    };
+    let to = req.body.email,
+      from = "no-reply@curant24.com",
+      subject = "Welcom on Curant24";
     let encrypted_password = CryptoJs.AES.encrypt(
       req.body.password,
       process.env.SECRET_KEY
@@ -426,8 +422,7 @@ router.get("/register", async (req, res) => {
                                             expiresIn: "5d",
                                           }
                                         );
-                                        sgMail
-                                          .send(msg)
+                                        sendEmail(to, subject, html, from)
                                           .then((response) => {
                                             console.log(response[0].statusCode);
                                             console.log(response[0].headers);
@@ -438,26 +433,21 @@ router.get("/register", async (req, res) => {
                                           });
 
                                         //sending new user's credentials through email to admin
-                                        sgMail.setApiKey(
-                                          process.env.SENDGRID_API_KEY
-                                        );
-                                        sgMail
-                                          .send({
-                                            to: "users@curant24.com",
-                                            from: "no-reply@curant24.com",
-                                            subject: "New customer on Curant24",
-                                            text:
-                                              " Full name: " +
-                                              req.body.first_name +
-                                              " " +
-                                              req.body.last_name +
-                                              " Email: " +
-                                              req.body.email +
-                                              " Password: " +
-                                              req.body.password +
-                                              " \n Phone number: " +
-                                              req.body.phone_no,
-                                          })
+                                        sendEmail(
+                                          "users@curant24.com",
+                                          "New customer on Curant24",
+                                          " Full name: " +
+                                            req.body.first_name +
+                                            " " +
+                                            req.body.last_name +
+                                            " Email: " +
+                                            req.body.email +
+                                            " Password: " +
+                                            req.body.password +
+                                            " \n Phone number: " +
+                                            req.body.phone_no,
+                                          "no-reply@curant24.com"
+                                        )
                                           .then((response) => {
                                             console.log(response[0].statusCode);
                                             console.log(response[0].headers);
@@ -490,14 +480,12 @@ router.get("/register", async (req, res) => {
                                                   resId[0]?.id
                                               );
                                             } else {
-                                              res
-                                                .status(200)
-                                                .send({
-                                                  email: req.body.email,
-                                                  account_type: req.body.type,
-                                                  token,
-                                                  id: resId[0]?.id,
-                                                });
+                                              res.status(200).send({
+                                                email: req.body.email,
+                                                account_type: req.body.type,
+                                                token,
+                                                id: resId[0]?.id,
+                                              });
                                             }
                                           }
                                         );
@@ -529,10 +517,10 @@ router.get("/register", async (req, res) => {
 //LOGIN
 
 router.get("/login", async (req, res) => {
-console.log('login route is calling');
-console.log(req.query.email);
-console.log(req.body);
-console.log(req.query);
+  console.log("login route is calling");
+  console.log(req.query.email);
+  console.log(req.body);
+  console.log(req.query);
   try {
     if (req.query.email) {
       req.body = req.query;
