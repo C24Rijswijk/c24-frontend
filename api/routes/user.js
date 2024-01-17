@@ -5630,7 +5630,7 @@ router.post("/verify-email", async (req, res) => {
       res.status(500).send(err);
       return;
     }
-    sendEmail(to, subject, html, "info@curant24.com")
+    sendEmail(to, subject, html)
       .then((response) => {
         res.status(200).send("Verify email send successfully");
       })
