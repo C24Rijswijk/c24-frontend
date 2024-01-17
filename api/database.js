@@ -4,7 +4,7 @@ try {
   var connection = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "123456789",
+    password: "password",
     database: "curant24",
   });
   connection.connect((err) => {
