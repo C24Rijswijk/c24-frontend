@@ -1,12 +1,6 @@
 //const sgMail = require("@sendgrid/mail");
 const Mailjet = require("node-mailjet");
 
-console.log(
-  process.env.MAILJED_API_KEY,
-  " ---- ",
-  process.env.MAILJED_SECRET_API_KEY
-);
-
 const mailjet = Mailjet.apiConnect(
   process.env.MAILJED_API_KEY,
   process.env.MAILJED_SECRET_API_KEY
