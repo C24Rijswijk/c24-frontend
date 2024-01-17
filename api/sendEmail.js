@@ -5,6 +5,11 @@ const mailjet = Mailjet.apiConnect(
   process.env.MAILJED_API_KEY,
   process.env.MAILJED_SECRET_API_KEY
 );
+console.log(
+  process.env.MAILJED_API_KEY,
+  " ---- ",
+  process.env.MAILJED_SECRET_API_KEY
+);
 
 const sendEmail = async (
   target,
