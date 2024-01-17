@@ -1,33 +1,27 @@
 //const sgMail = require("@sendgrid/mail");
-const mailjet = require("node-mailjet").connect(
+const Mailjet = require("node-mailjet");
+
+const mailjet = Mailjet.apiConnect(
   process.env.MAILJED_API_KEY,
   process.env.MAILJED_SECRET_API_KEY
 );
 
-const sendEmail = (target, subject, html) => {
-  const request = mailjet.post("send", { version: "v3.1" }).request({
-    Messages: [
-      {
-        From: {
-          Email: "no-reply@curant24.com",
-          Name: "No Reply",
-        },
-        To: [
-          {
-            Email: target,
-            Name: target,
-          },
-        ],
-        Subject: subject,
-        TextPart:
-          "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-        HTMLPart: html,
-      },
-    ],
+const sendEmail = async (
+  target,
+  subject,
+  html,
+  from = "no-reply@curant24.com"
+) => {
+  const request = mailjet.post("send").request({
+    FromEmail: from,
+    FromName: "Curant24",
+    Subject: subject,
+    "HTML-part": html,
+    Recipients: [{ Email: target }],
   });
   request
     .then((result) => {
-      console.log(result.body);
+      console.log({ ...result.body });
     })
     .catch((err) => {
       console.log(err.statusCode);

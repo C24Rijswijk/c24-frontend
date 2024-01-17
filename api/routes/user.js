@@ -98,143 +98,137 @@ router.post("/update-password", verify, async (req, res) => {
 
 //reset password email
 router.post("/reset-password-email", async (req, res) => {
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   //key to be inserted on database when reseting password it will be verified
   let key = generatePassword();
   console.log(req.body);
-  let msg = {
-    to: req.body.email,
-    from: "no-reply@curant24.com",
-    subject: "Reset Password",
-    html:
-      "<!DOCTYPE html>" +
-      '  <html lang="en">' +
-      "  <head>" +
-      '      <meta name="viewport" content="width=device-width, initial-scale=1" />' +
-      '      <meta name="theme-color" content="#000000" />' +
-      "      <style>" +
-      "          body{" +
-      "             color:black !important;" +
-      "          }" +
-      "          body td{" +
-      "              margin:auto;" +
-      "          }" +
-      "          body .wrapper{" +
-      "              width:700px;" +
-      "              border-radius: 4px;" +
-      "              border: #ccc 1px solid;" +
-      "              display:flex;" +
-      "              flex-direction:column !important;" +
-      "              color:black;" +
-      "          }" +
-      "  " +
-      "          .wrapper, .content{" +
-      "              display: flex;" +
-      "              flex-direction: column;" +
-      "              align-items: center;" +
-      "              justify-content: center;" +
-      "          }" +
-      "          .wrapper .title{" +
-      "              width: 100%;" +
-      "              background-color: #147536;" +
-      "              margin-bottom: 30px;" +
-      "          }" +
-      "          .wrapper .title td{" +
-      "              padding:25px;" +
-      "          }" +
-      "          .wrapper .title img{" +
-      "              width: 60px;" +
-      "              height: 88px;" +
-      "          }" +
-      "          .wrapper .content .title h2{" +
-      "              font-weight: 900;" +
-      "          }" +
-      "          .wrapper .content .title p{" +
-      "              font-weight: 500;" +
-      "          }" +
-      "          .wrapper .content .content-information{" +
-      "              padding: 0 5%;" +
-      "          }" +
-      "          .wrapper .footer{" +
-      "              width: 100%;" +
-      "              background-color: #147536;" +
-      "              display: flex;" +
-      "              justify-content: space-between;" +
-      "              align-items: center;" +
-      "          }" +
-      "          .wrapper .footer .left{" +
-      "              display: flex;" +
-      "              flex-direction: column;" +
-      "              align-items: center;" +
-      "              justify-content: center;" +
-      "          }" +
-      "          .wrapper .footer .left p{" +
-      "              margin: 3px;" +
-      "              color: white;" +
-      "          }" +
-      "      </style>" +
-      "      <title>Welcome</title>" +
-      "  </head>" +
-      '  <body style="width:100%;display:flex;justify-content:center"> ' +
-      '      <table class="wrapper" style="width:500px;width:100%;border-collapse:separate;">' +
-      "        <tbody>" +
-      '          <tr class="title">' +
-      '              <td style="width:100vw">' +
-      '                  <img src="https://www.curant24.nl/images/logo.png" alt="">' +
-      "              </td>" +
-      "          </tr>" +
-      '          <tr class="content">' +
-      '              <div class="content-title">' +
-      "                  <h2>" +
-      "                      Reset Password" +
-      "                  </h2>" +
-      "              </div>" +
-      '              <div class="content-information">' +
-      "                  <p>" +
-      "                      Hello " +
-      "                  </p>" +
-      "                  <p>" +
-      "                      You have requested to reset your password on Curant24." +
-      "                  </p>" +
-      "                  <p>" +
-      "                      Your verification code is the following: " +
-      key +
-      "" +
-      "                  </p>" +
-      "                  <p>" +
-      "                      Sincerely," +
-      "                  </p>" +
-      "                  <p>" +
-      "                      Team Curant24." +
-      "                  </p>" +
-      "              </div>" +
-      "          </tr>" +
-      '          <tr class="footer">' +
-      "              <td>" +
-      "                    <table>" +
-      '                          <tr style="color:#fff;">' +
-      "                              ® Curant24  2022 " +
-      "                          </tr>" +
-      '                          <tr style="color:#fff;">' +
-      "                              Telephone : 020-7702280" +
-      '                          </tr style="color:#fff;">' +
-      '                          <tr style="color:#fff;">' +
-      "                              Email: info@Curant24.nl" +
-      "                          </tr>" +
-      "                     </table>" +
-      "                </td>" +
-      '                <td align="right">' +
-      "                    <table>" +
-      '                        <img src="https://www.curant24.nl/images/facebook.png" alt=""/>' +
-      '                        <img src="https://www.curant24.nl/images/linkedin.png" alt=""/>' +
-      "                    </table>" +
-      "                </td>" +
-      "          </tr>" +
-      "        </tbody>" +
-      "      </table>" +
-      "  </body>" +
-      "  </html>",
-  };
+  let html =
+    "<!DOCTYPE html>" +
+    '  <html lang="en">' +
+    "  <head>" +
+    '      <meta name="viewport" content="width=device-width, initial-scale=1" />' +
+    '      <meta name="theme-color" content="#000000" />' +
+    "      <style>" +
+    "          body{" +
+    "             color:black !important;" +
+    "          }" +
+    "          body td{" +
+    "              margin:auto;" +
+    "          }" +
+    "          body .wrapper{" +
+    "              width:700px;" +
+    "              border-radius: 4px;" +
+    "              border: #ccc 1px solid;" +
+    "              display:flex;" +
+    "              flex-direction:column !important;" +
+    "              color:black;" +
+    "          }" +
+    "  " +
+    "          .wrapper, .content{" +
+    "              display: flex;" +
+    "              flex-direction: column;" +
+    "              align-items: center;" +
+    "              justify-content: center;" +
+    "          }" +
+    "          .wrapper .title{" +
+    "              width: 100%;" +
+    "              background-color: #147536;" +
+    "              margin-bottom: 30px;" +
+    "          }" +
+    "          .wrapper .title td{" +
+    "              padding:25px;" +
+    "          }" +
+    "          .wrapper .title img{" +
+    "              width: 60px;" +
+    "              height: 88px;" +
+    "          }" +
+    "          .wrapper .content .title h2{" +
+    "              font-weight: 900;" +
+    "          }" +
+    "          .wrapper .content .title p{" +
+    "              font-weight: 500;" +
+    "          }" +
+    "          .wrapper .content .content-information{" +
+    "              padding: 0 5%;" +
+    "          }" +
+    "          .wrapper .footer{" +
+    "              width: 100%;" +
+    "              background-color: #147536;" +
+    "              display: flex;" +
+    "              justify-content: space-between;" +
+    "              align-items: center;" +
+    "          }" +
+    "          .wrapper .footer .left{" +
+    "              display: flex;" +
+    "              flex-direction: column;" +
+    "              align-items: center;" +
+    "              justify-content: center;" +
+    "          }" +
+    "          .wrapper .footer .left p{" +
+    "              margin: 3px;" +
+    "              color: white;" +
+    "          }" +
+    "      </style>" +
+    "      <title>Welcome</title>" +
+    "  </head>" +
+    '  <body style="width:100%;display:flex;justify-content:center"> ' +
+    '      <table class="wrapper" style="width:500px;width:100%;border-collapse:separate;">' +
+    "        <tbody>" +
+    '          <tr class="title">' +
+    '              <td style="width:100vw">' +
+    '                  <img src="https://www.curant24.nl/images/logo.png" alt="">' +
+    "              </td>" +
+    "          </tr>" +
+    '          <tr class="content">' +
+    '              <div class="content-title">' +
+    "                  <h2>" +
+    "                      Reset Password" +
+    "                  </h2>" +
+    "              </div>" +
+    '              <div class="content-information">' +
+    "                  <p>" +
+    "                      Hello " +
+    "                  </p>" +
+    "                  <p>" +
+    "                      You have requested to reset your password on Curant24." +
+    "                  </p>" +
+    "                  <p>" +
+    "                      Your verification code is the following: " +
+    key +
+    "" +
+    "                  </p>" +
+    "                  <p>" +
+    "                      Sincerely," +
+    "                  </p>" +
+    "                  <p>" +
+    "                      Team Curant24." +
+    "                  </p>" +
+    "              </div>" +
+    "          </tr>" +
+    '          <tr class="footer">' +
+    "              <td>" +
+    "                    <table>" +
+    '                          <tr style="color:#fff;">' +
+    "                              ® Curant24  2022 " +
+    "                          </tr>" +
+    '                          <tr style="color:#fff;">' +
+    "                              Telephone : 020-7702280" +
+    '                          </tr style="color:#fff;">' +
+    '                          <tr style="color:#fff;">' +
+    "                              Email: info@Curant24.nl" +
+    "                          </tr>" +
+    "                     </table>" +
+    "                </td>" +
+    '                <td align="right">' +
+    "                    <table>" +
+    '                        <img src="https://www.curant24.nl/images/facebook.png" alt=""/>' +
+    '                        <img src="https://www.curant24.nl/images/linkedin.png" alt=""/>' +
+    "                    </table>" +
+    "                </td>" +
+    "          </tr>" +
+    "        </tbody>" +
+    "      </table>" +
+    "  </body>" +
+    "  </html>";
   db.query(
     "update users set user_key = ? where email = ?",
     [key, req.body.email],
@@ -244,11 +238,8 @@ router.post("/reset-password-email", async (req, res) => {
         res.status(500).send(err);
         return;
       }
-      sgMail
-        .send(msg)
+      sendEmail(req.body.email, "Reset Password", html)
         .then((response) => {
-          console.log(response[0].statusCode);
-          console.log(response[0].headers);
           res.status(200).send("reset password email send successfully");
         })
         .catch((error) => {
@@ -1519,20 +1510,11 @@ router.post("/invite", verify, async (req, res) => {
         </body>
         </html>
         `;
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-    const msg = {
-      to: req.body.recipient,
-      from: "no-reply@curant24.com",
-      subject: "invitation",
-      html,
-    };
-
-    sgMail
-      .send(msg)
+    let to = req.body.recipient,
+      subject = "invitation";
+    sendEmail(to, subject, html)
       .then((response) => {
-        console.log(response[0].statusCode);
-        console.log(response[0].headers);
         db.query(
           "insert into invite values (null,?,?,?,?,?) ",
           [
@@ -2469,7 +2451,9 @@ router.post("/add-assignement", verify, async (req, res) => {
         console.log(err);
         res.status(500).send(err);
       } else {
-        await db.query("select id from assignements order by(id) desc", async (err, result) => {
+        await db.query(
+          "select id from assignements order by(id) desc",
+          async (err, result) => {
             if (err) {
               console.log(err);
               res.status(500).send(err);
@@ -2489,7 +2473,7 @@ router.post("/add-assignement", verify, async (req, res) => {
                     )
                   );
                 }
-                files_strings.map(async(item) => {
+                files_strings.map(async (item) => {
                   await db.query(
                     "insert into assignements_files values (null,?,?);",
                     [item.data.path, id],
@@ -2503,7 +2487,7 @@ router.post("/add-assignement", verify, async (req, res) => {
                   );
                 });
               }
-              info.what_may_be_charged?.map(async(item) => {
+              info.what_may_be_charged?.map(async (item) => {
                 await db.query(
                   "insert into what_may_be_charged_assignement values (null,?,?)",
                   [item, id],
@@ -2516,7 +2500,7 @@ router.post("/add-assignement", verify, async (req, res) => {
                   }
                 );
               });
-              info.working_days?.map(async(item) => {
+              info.working_days?.map(async (item) => {
                 await db.query(
                   "insert into working_days values (null,?,?)",
                   [item, id],
@@ -2529,44 +2513,47 @@ router.post("/add-assignement", verify, async (req, res) => {
                   }
                 );
               });
-              info.required_certificates?.map(async(item) =>
-                await db.query(
-                  "insert into assignements_certificate values (null,?,?)",
-                  [item, id],
-                  (err) => {
-                    if (err) {
-                      console.log(err);
-                      res.status(500).send(err);
-                      throw err;
+              info.required_certificates?.map(
+                async (item) =>
+                  await db.query(
+                    "insert into assignements_certificate values (null,?,?)",
+                    [item, id],
+                    (err) => {
+                      if (err) {
+                        console.log(err);
+                        res.status(500).send(err);
+                        throw err;
+                      }
                     }
-                  }
-                )
+                  )
               );
-              info.checked_comp?.map(async(item) =>
-                await db.query(
-                  "insert into assignements_competencies values (null,?,?)",
-                  [item, id],
-                  (err) => {
-                    if (err) {
-                      console.log(err);
-                      res.status(500).send(err);
-                      throw err;
+              info.checked_comp?.map(
+                async (item) =>
+                  await db.query(
+                    "insert into assignements_competencies values (null,?,?)",
+                    [item, id],
+                    (err) => {
+                      if (err) {
+                        console.log(err);
+                        res.status(500).send(err);
+                        throw err;
+                      }
                     }
-                  }
-                )
+                  )
               );
-              info.skills?.map(async(item) =>
-                await db.query(
-                  "insert into assignement_skills values (null,?,?)",
-                  [item, id],
-                  (err) => {
-                    if (err) {
-                      console.log(err);
-                      res.status(500).send(err);
-                      throw err;
+              info.skills?.map(
+                async (item) =>
+                  await db.query(
+                    "insert into assignement_skills values (null,?,?)",
+                    [item, id],
+                    (err) => {
+                      if (err) {
+                        console.log(err);
+                        res.status(500).send(err);
+                        throw err;
+                      }
                     }
-                  }
-                )
+                  )
               );
 
               await db.query(
@@ -2585,8 +2572,11 @@ router.post("/add-assignement", verify, async (req, res) => {
                   }
                   //insert all found records in new table assignement_found_alerts (insert user_id,assignement_id)
                   console.log(result2);
-                  result2.map( async(item) => {
-                    await db.query("select user_name from users where id = ?",item.user_id,async(err, res3) => {
+                  result2.map(async (item) => {
+                    await db.query(
+                      "select user_name from users where id = ?",
+                      item.user_id,
+                      async (err, res3) => {
                         if (err) {
                           console.log(err);
                           res.status(500).send(err);
@@ -3723,13 +3713,13 @@ router.post("/search", async (req, res) => {
           values.push(value.values);
           console.log("values:>" + value.values);
         } else if (key === "currency" && req.body?.table === "users") {
-          if(value.values === "all"){
-            console.log('if is working');
+          if (value.values === "all") {
+            console.log("if is working");
             query += " id in (select user_id from company_details)";
-          }else{
-            console.log('else is working');
+          } else {
+            console.log("else is working");
             query +=
-            " id in (select user_id from company_details where currency = ?)";
+              " id in (select user_id from company_details where currency = ?)";
             values.push(value.values);
             console.log("currency:>" + value.values);
           }
@@ -3956,7 +3946,7 @@ router.post("/apply", verify, async (req, res) => {
         return;
       }
     });
-     db.query(
+    db.query(
       "select job_name from assignements where id = ?",
       req.body.id,
       (err, result) => {
@@ -5500,15 +5490,12 @@ router.delete("/remove-reserve-service", verify, async (req, res) => {
 
 //reset password email
 router.post("/verify-email", async (req, res) => {
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   //key to be inserted on database when reseting password it will be verified
   let key = generatePassword();
   console.log(req.body);
-  let msg = {
-    to: req.body.email,
-    from: "no-reply@curant24.com",
-    subject: "Verify email",
-    html:
+  let to = req.body.email,
+    subject = "Verify email",
+    html =
       "<!DOCTYPE html>" +
       '  <html lang="en">' +
       "  <head>" +
@@ -5636,19 +5623,15 @@ router.post("/verify-email", async (req, res) => {
       "        </tbody>" +
       "      </table>" +
       "  </body>" +
-      "  </html>",
-  };
+      "  </html>";
   db.query("insert into verification_email values(null,?);", [key], (err) => {
     if (err) {
       console.log(err);
       res.status(500).send(err);
       return;
     }
-    sgMail
-      .send(msg)
+    sendEmail(to, subject, html, "info@curant24.com")
       .then((response) => {
-        console.log(response[0].statusCode);
-        console.log(response[0].headers);
         res.status(200).send("Verify email send successfully");
       })
       .catch((error) => {

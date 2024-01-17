@@ -1,19 +1,19 @@
-const util = require('util');
-var mysql = require('mysql');
+const util = require("util");
+var mysql = require("mysql");
 try {
-    var connection = mysql.createConnection({
-      host     :'localhost',
-      user     : 'root',
-      password : 'password',
-      database:'curant24'
-    });
-    connection.connect((err)=>{
-      if(err){
-        throw err;
-      }
-    });
-    console.log("database is connected !")
-/*
+  var connection = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "123456789",
+    database: "curant24",
+  });
+  connection.connect((err) => {
+    if (err) {
+      throw err;
+    }
+  });
+  console.log("database is connected !");
+  /*
 // Promisify MySQL query function
 const query = util.promisify(connection.query).bind(connection);
 
@@ -55,7 +55,7 @@ async function updateForeignKeys() {
 updateForeignKeys();
 */
 } catch (error) {
-    console.log(error)
+  console.log(error);
 }
-module.exports = connection; 
+module.exports = connection;
 //database conn
